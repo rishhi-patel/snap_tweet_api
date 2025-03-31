@@ -1,13 +1,12 @@
-name: Run Backend Tests
+name: 🔁 Test & Deploy Backend
 
 on:
-  pull_request:
+  push:
     paths:
       - "**"
-      - ".github/workflows/**" # optional, if you're editing the workflow
+      - ".github/workflows/**"
     branches:
       - main
-      - dev
 
 jobs:
   test-backend:
@@ -29,3 +28,12 @@ jobs:
 
       - run: npm install
       - run: npm run test
+
+  deploy:
+    needs: test-backend
+    if: github.ref == 'refs/heads/main' # deploy only from main
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚀 Trigger Render Deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
