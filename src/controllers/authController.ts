@@ -29,7 +29,7 @@ const generateToken = (user: UserDocument): string => {
   )
 }
 
-// Signup
+// Signup user
 export const signup = async (
   req: Request<{}, {}, SignupRequest>,
   res: Response
@@ -37,6 +37,7 @@ export const signup = async (
   try {
     const { email, username, password } = req.body
 
+    // Check if user already exists
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       res.status(400).json({ error: "Email already in use" })
