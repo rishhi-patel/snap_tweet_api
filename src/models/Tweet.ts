@@ -11,7 +11,7 @@ export interface ITweet extends Document {
 
 const tweetSchema = new Schema<ITweet>({
   content: { type: String, required: true, maxlength: 280 },
-  image: { type: String, maxlength: 280 },
+  image: { type: String, maxlength: 2048 },
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Users who liked the tweet
   createdAt: { type: Date, default: Date.now },
