@@ -7,7 +7,7 @@ import {
   getTweets,
 } from "../../src/controllers/tweetController"
 
-import Tweet, { ITweet } from "../../src/models/Tweet"
+import Tweet from "../../src/models/Tweet"
 
 //TweetParams
 interface TweetParams {
