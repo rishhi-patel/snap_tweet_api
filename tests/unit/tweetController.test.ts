@@ -5,8 +5,13 @@ import {
   likeTweet,
   deleteTweet,
   getTweets,
+<<<<<<< Updated upstream
 } from "../../src/controllers/tweetController";
 import Tweet, { ITweet } from "../../src/models/Tweet";
+=======
+} from "../../src/controllers/tweetController"
+import Tweet from "../../src/models/Tweet"
+>>>>>>> Stashed changes
 
 //TweetParams
 interface TweetParams {
