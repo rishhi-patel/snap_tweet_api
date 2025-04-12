@@ -9,26 +9,29 @@ interface TweetParams {
   id: string
 }
 
-// Create a new Twee
+// Create a new Tweet
 export const createTweet = async (
   req: Request<{}, {}, CreateTweetRequest>,
   res: Response
 ): Promise<void> => {
   try {
     if (!req.user) {
-      res.status(401).json({ error: "Unauthorized" }) // Ensure it blocks unauthorized requests
+      res.status(401).json({ error: "Unauthorized" })
       return
     }
 
     if (!req.body.content || req.body.content.trim() === "") {
-      res.status(400).json({ error: "Content is required" }) // Ensure empty tweets are rejected
+      res.status(400).json({ error: "Content is required" })
       return
     }
 
-    const tweet = await Tweet.create({
+    let tweet = await Tweet.create({
       content: req.body.content,
       user: req.user.id,
+      image: req.file?.path, // Cloudinary image URL
     })
+
+    tweet = await tweet.populate("user", "username")
 
     res.status(201).json(tweet)
   } catch (error) {
@@ -68,6 +71,7 @@ export const likeTweet = async (
       res.status(401).json({ error: "Unauthorized" })
       return
     }
+    console.log(req.user.id)
 
     if (tweet.likes.includes(req.user.id)) {
       tweet.likes = tweet.likes.filter(
