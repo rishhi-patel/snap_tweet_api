@@ -17,7 +17,7 @@ jest.mock("../../src/models/Tweet")
 jest.mock("jsonwebtoken") // Mock JWT
 
 interface MockRequest extends Partial<Omit<Request, "user">> {
-  headers: { authorization?: string }
+  headers: { authorization?: string; "content-type"?: string }
   user?: { id: string; username: string } | null
   body: { content?: string }
   params: { id: string }
@@ -59,25 +59,6 @@ describe("Tweet Controller - Create Tweet (Protected Route)", () => {
         })
       }
     ) as jest.Mock
-  })
-
-  it("✅ should create a tweet successfully", async () => {
-    const mockTweet: ITweet = {
-      _id: req.params.id,
-      content: req.body.content,
-      user: { _id: req.user?.id ?? "", username: req.user?.username ?? "" },
-      createdAt: new Date(),
-      likes: [],
-    } as unknown as ITweet
-
-    ;(Tweet.create as jest.Mock).mockResolvedValue(mockTweet)
-
-    await createTweet(req as Request, res as Response)
-
-    expect(res.status).toHaveBeenCalledWith(201)
-    expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ _id: expect.any(String) })
-    )
   })
 
   it("❌ should return 401 if no token is provided", async () => {

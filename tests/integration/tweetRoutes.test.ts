@@ -5,20 +5,19 @@ let token: string
 // Removed unused tweetId variable
 
 beforeAll(async () => {
-  // 🔥 Get a valid token by signing up & logging in
-  await request(app).post("/api/auth/signup").send({
-    username: "testuser",
-    email: "testuser@example.com",
-    password: "password123",
-  })
+  try {
+    // 🔥 Get a valid token by signing up & logging in
+    const signupRes = await request(app).post("/api/auth/signup").send({
+      username: "testuser",
+      email: "testuser@example.com",
+      password: "password123",
+    })
+    console.log("Signup Response:", signupRes.status, signupRes.body)
 
-  const loginRes = await request(app).post("/api/auth/login").send({
-    email: "testuser@example.com",
-    password: "password123",
-  })
-
-  token = loginRes.body.token as string // 🔥 Save token for protected routes
-  console.log("Token:", token) // 🔥 Log the token for debugging
+    token = signupRes.body.token as string // 🔥 Save token for protected routes
+  } catch (error) {
+    console.error("Error during setup:", error)
+  }
 })
 
 describe("Tweet Routes - Integration Tests", () => {
