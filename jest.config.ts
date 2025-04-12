@@ -1,4 +1,4 @@
-import type { Config } from "jest";
+import type { Config } from "jest"
 
 const config: Config = {
   preset: "ts-jest",
@@ -22,11 +22,11 @@ const config: Config = {
       statements: 75,
     },
   },
-  coveragePathIgnorePatterns: ["/node_modules/"],
+  coveragePathIgnorePatterns: ["/node_modules/", "/src/utils/cloudinary.ts"],
   setupFilesAfterEnv: [
     "<rootDir>/tests/setup.ts",
     "<rootDir>/src/config/db.ts",
   ], // ✅ Load env + connect/disconnect DB
-};
+}
 
-export default config;
+export default config

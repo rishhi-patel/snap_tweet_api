@@ -2,15 +2,16 @@
 @BASE_URL = http://localhost:5000/api
 
 ### AUTHENTICATION
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDc5M2EzZDZiOTc2YjdkZjI4NTYyZiIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE3NDIxODE0MzAsImV4cCI6MTc0MjE4NTAzMH0.W_Io3J3m6OJ5-PbYpkQq-qxOS0VJ1R2L4pbZFItL39g
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZjliNzYzNTRjMmI1ZjQ2Y2ZmZjgxOSIsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE3NDQ0MTg2NTksImV4cCI6MTc0NDQyMjI1OX0.1Ah6IzJiHEnnwacUnQj2aTDlG5F213m8SKn1WeF0gBo
+
 ### 1️⃣ User Signup
 POST {{BASE_URL}}/auth/signup
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "email": "testuser@example.com",
-    "password": "password123"
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123"
 }
 
 ### 2️⃣ User Login
@@ -18,29 +19,37 @@ POST {{BASE_URL}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "testuser@example.com",
-    "password": "password123"
+  "email": "testuser@example.com",
+  "password": "password123"
 }
 
-### 🔹 Copy JWT Token from response and replace @TOKEN above manually
+### 🔹 Copy JWT Token from response and paste into @TOKEN above manually
 
 ### 3️⃣ Get Current User (Protected)
 GET {{BASE_URL}}/auth/me
 Authorization: Bearer {{TOKEN}}
 
-### 4️⃣ Create a Tweet (Protected)
+### 4️⃣ Create a Tweet with Image (Protected)
+# NOTE: Replace path-to-your-image.jpg with actual image path
 POST {{BASE_URL}}/tweets
-Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
+Content-Type: multipart/form-data
 
-{
-    "content": "Hello, this is my first tweet!"
-}
+--boundary123
+Content-Disposition: form-data; name="content"
+
+Hello, this tweet has an image!
+--boundary123
+Content-Disposition: form-data; name="image"; filename="sample.jpg"
+Content-Type: image/jpeg
+
+./devops.webp
+--boundary123--
 
 ### 5️⃣ Get All Tweets (Public)
 GET {{BASE_URL}}/tweets
 
-### 6️⃣ Get a Single Tweet by ID (Replace `TWEET_ID`)
+### 6️⃣ Get a Single Tweet by ID
 @TWEET_ID = 67d7944bd6b976b7df28563b
 
 GET {{BASE_URL}}/tweets/{{TWEET_ID}}
@@ -49,6 +58,6 @@ GET {{BASE_URL}}/tweets/{{TWEET_ID}}
 POST {{BASE_URL}}/tweets/{{TWEET_ID}}/like
 Authorization: Bearer {{TOKEN}}
 
-### 8️⃣ Delete a Tweet (Only Owner Can Delete)
+### 8️⃣ Delete a Tweet (Protected, Only Owner)
 DELETE {{BASE_URL}}/tweets/{{TWEET_ID}}
 Authorization: Bearer {{TOKEN}}
